@@ -23,5 +23,5 @@ const imageUrls: string[] = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class TrendingPagesComponent {
-  public gifs:string[]=imageUrls;
+  gifs:string[]=imageUrls;
 }
