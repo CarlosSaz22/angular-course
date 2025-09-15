@@ -1,0 +1,11 @@
+<app-country-search-input placeholder="Buscar por país"
+(value)="query.set($event)"/>
+
+
+
+<app-country-list [countriesList]="countryNameResource.value()??[]"
+[errorMessage]="countryNameResource.error()"
+[isEmpty]="countryNameResource.value()?.length===0"
+[isLoading]="countryNameResource.isLoading()"
+/>
+
