@@ -1,9 +1,10 @@
-import { Component, inject, resource, signal } from '@angular/core';
+import { Component, inject, linkedSignal, resource, signal } from '@angular/core';
 import { CountryListComponent } from "../../components/country-list/country-list.component";
 import { CountrySearchInputComponent } from "../../components/country-search-input/country-search-input.component";
 import { CountryService } from '../../services/country.service';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { firstValueFrom, of } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 
@@ -17,33 +18,40 @@ export class ByCapitalPageComponent {
 
   countryService = inject(CountryService);
 
+  ActivatedRoute = inject(ActivatedRoute);
 
+  router = inject(Router);
 
+  queryParam = this.ActivatedRoute.snapshot.queryParamMap.get('query') ?? '';
 
-query = signal<string>('');
+  query = linkedSignal(() => this.queryParam);
 
+  countryResource = rxResource({
+    params: () => ({ query: this.query() }),
+    stream: ({ params }) => {
+      if (!params.query) {
+        return of([]);  // <-- Retornar observable vacío correctamente
+      }
 
-
-countryResource = rxResource({
-  params: () => ({ query: this.query() }),
-  stream: ({ params }) => {
-    if (!params.query) {
-      return of([]);  // <-- Retornar observable vacío correctamente
+      this.router.navigate(['/country/by-capital'], {
+        queryParams: {
+          query: params.query,
+        }
+      })
+      return this.countryService.searchByCapital(params.query);  // Observable esperado
     }
-    return this.countryService.searchByCapital(params.query);  // Observable esperado
-  }
-});
+  });
 
 
-//  countryResource = resource({
-//   params: () => ({query: this.query()}),
-//   loader: async({params }) => {
+  //  countryResource = resource({
+  //   params: () => ({query: this.query()}),
+  //   loader: async({params }) => {
 
-//     if(!params.query) return [];
+  //     if(!params.query) return [];
 
-//     return await firstValueFrom(this.countryService.searchByCapital(params.query));
-//   },
-// });
+  //     return await firstValueFrom(this.countryService.searchByCapital(params.query));
+  //   },
+  // });
 
 
 

@@ -7,6 +7,8 @@ class="input input-bordered mr-2 w-56"
 autofocus
 #txtSearch
 (keyup.enter)="value.emit(txtSearch.value)"
+(keyup)="inputValue.set(txtSearch.value)"
+[value]="inputValue()"
 />
 
 <button (click)="value.emit(txtSearch.value)" class="btn btn-primary">Buscar</button>
