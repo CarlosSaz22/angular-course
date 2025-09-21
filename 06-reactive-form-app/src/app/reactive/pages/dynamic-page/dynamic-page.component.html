@@ -7,10 +7,11 @@
   <div class="mb-3 row">
     <label class="col-sm-3 col-form-label">Nombre</label>
     <div class="col-sm-9">
-      <input class="form-control" placeholder="Nombre de la persona" formControlName="name">
+      <input class="form-control" placeholder="Nombre y apellido" formControlName="name">
       @if(formUtils.isValidField(myForm,'name')){
       <span class="form-text text-danger">
-        {{formUtils.getFieldError(myForm,'name')}}
+        El campo debe tener nombre y apellido
+        <!-- {{formUtils.getFieldError(myForm,'name')}} -->
       </span>
       }
     </div>
